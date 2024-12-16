@@ -38,9 +38,6 @@ LABEL org.label-schema.url="https://github.com/space-ros"
 LABEL org.label-schema.vcs-url="https://github.com/space-ros/docker-images"
 LABEL org.label-schema.vcs-ref=${VCS_REF}
 
-# Disable prompting during package installation
-ARG DEBIAN_FRONTEND=noninteractive
-
 SHELL ["/bin/bash", "-c"]
 
 # Define workspace locations
@@ -70,7 +67,7 @@ RUN rm -rf src build log
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \  
     sudo apt update && \
-    sudo apt install -y ros-humble-rviz2 ros-humble-nav2-bringup
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y ros-humble-rviz2 ros-humble-nav2-bringup
 
 # Set up the entrypoint
 COPY ./entrypoint.sh /

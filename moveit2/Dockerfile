@@ -38,9 +38,6 @@ LABEL org.label-schema.url="https://github.com/space-ros"
 LABEL org.label-schema.vcs-url="https://github.com/space-ros/docker-images"
 LABEL org.label-schema.vcs-ref=${VCS_REF}
 
-# Disable prompting during package installation
-ARG DEBIAN_FRONTEND=noninteractive
-
 # Clone all space-ros sources
 RUN mkdir ${SPACEROS_DIR}/src \
   && vcs import ${SPACEROS_DIR}/src < ${SPACEROS_DIR}/exact.repos
@@ -62,7 +59,7 @@ RUN rosdep update
 # Install the various build and test tools
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
-  sudo apt install -y \
+  sudo DEBIAN_FRONTEND=noninteractive apt install -y \
   build-essential \
   clang-format \
   cmake \
@@ -141,7 +138,7 @@ RUN /bin/bash -c 'source ${SPACEROS_DIR}/install/setup.bash \
 # Add a couple sample GUI apps for testing
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   --mount=type=cache,target=/var/lib/apt,sharing=locked \
-  sudo apt-get install -y \
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   firefox \
   glmark2 \
   libcanberra-gtk3-0 \
